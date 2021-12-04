@@ -13,16 +13,10 @@ impl BitCounter {
             n_additions: 0,
             size
         };
-        proto.reset();
-        proto
-    }
-
-    fn reset(&mut self) {
-        self.counts = vec![];
-        for _ in 0..self.size {
-            self.counts.push(0)
+        for _ in 0..size {
+            proto.counts.push(0)
         }
-        self.n_additions = 0
+        proto
     }
 
     pub fn add_bits(&mut self, bit_string: &str) {
@@ -37,34 +31,29 @@ impl BitCounter {
         self.n_additions += 1
     }
 
-    pub fn get_most_common(&self) -> Vec<usize> {
+    fn get_by_discriminator(&self, discriminator: impl Fn(usize) -> bool) -> Vec<usize> {
         let mut output = vec![];
 
         for i in 0..self.size {
-            if self.counts[i] > self.n_additions / 2 {
+            if discriminator(self.counts[i]) {
                 output.push(1)
             } else {
                 output.push(0)
             }
         }
         return output;
+    }
+
+    pub fn get_most_common(&self) -> Vec<usize> {
+        self.get_by_discriminator(|x| {x > self.n_additions/2})
     }
 
     pub fn get_least_common(&self) -> Vec<usize> {
-        let mut output = vec![];
-
-        for i in 0..self.size {
-            if self.counts[i] < self.n_additions / 2 {
-                output.push(1)
-            } else {
-                output.push(0)
-            }
-        }
-        return output;
+       self.get_by_discriminator(|x| {x < self.n_additions/2})
     }
 }
 
-pub fn vec_to_usize(v: Vec<usize>) -> usize {
+pub fn vec_to_usize(v: &Vec<usize>) -> usize {
     let mut x = 0;
     for i in 0..(v.len()) {
         x += v[v.len() - i - 1] << i;

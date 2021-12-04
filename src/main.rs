@@ -13,5 +13,5 @@ fn main() {
     let gamma = counter.get_most_common();
     let epsilon = counter.get_least_common();
 
-    print!("{}\n", vec_to_usize(gamma)*vec_to_usize(epsilon))
+    print!("{}\n", vec_to_usize(&gamma)*vec_to_usize(&epsilon))
 }
