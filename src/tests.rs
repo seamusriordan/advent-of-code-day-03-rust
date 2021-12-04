@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use crate::{BitCounter, vec_to_usize};
+    use crate::{BitCounter, get_co2, get_oxygen, vec_to_usize};
 
     #[test]
     fn new_has_0_counts() {
@@ -35,7 +35,7 @@ mod tests {
         counter.add_bits("00001");
         counter.add_bits("10000");
 
-        assert_eq!(vec![0, 0, 0, 0, 0], counter.get_most_common());
+        assert_eq!(vec![1, 0, 0, 0, 1], counter.get_most_common());
     }
 
     #[test]
@@ -62,17 +62,17 @@ mod tests {
 
     #[test]
     fn string_00000_is_0() {
-        assert_eq!(0, vec_to_usize(vec![0, 0, 0, 0, 0]));
+        assert_eq!(0, vec_to_usize(&vec![0, 0, 0, 0, 0]));
     }
 
     #[test]
     fn string_10000_is_16() {
-        assert_eq!(16, vec_to_usize(vec![1, 0, 0, 0, 0]));
+        assert_eq!(16, vec_to_usize(&vec![1, 0, 0, 0, 0]));
     }
 
     #[test]
     fn string_10110_is_22() {
-        assert_eq!(22, vec_to_usize(vec![1, 0, 1, 1, 0]));
+        assert_eq!(22, vec_to_usize(&vec![1, 0, 1, 1, 0]));
     }
 
     #[test]
@@ -91,7 +91,7 @@ mod tests {
             "10000",
             "11001",
             "00010",
-            "01010 ",
+            "01010",
         ];
 
 
@@ -99,7 +99,50 @@ mod tests {
             counter.add_bits(input);
         }
 
-        assert_eq!(22, vec_to_usize(counter.get_most_common()));
-        assert_eq!(9, vec_to_usize(counter.get_least_common()));
+        assert_eq!(22, vec_to_usize(&counter.get_most_common()));
+        assert_eq!(9, vec_to_usize(&counter.get_least_common()));
+    }
+
+
+    #[test]
+    fn example_oxygen_gives_23() {
+        let input_strings = vec![
+            "00100",
+            "11110",
+            "10110",
+            "10111",
+            "10101",
+            "01111",
+            "00111",
+            "11100",
+            "10000",
+            "11001",
+            "00010",
+            "01010",
+        ];
+
+
+        assert_eq!(23, get_oxygen(input_strings.into_iter()));
+    }
+
+    #[test]
+    fn example_co2_gives_10() {
+        let input_strings = vec![
+            "00100",
+            "11110",
+            "10110",
+            "10111",
+            "10101",
+            "01111",
+            "00111",
+            "11100",
+            "10000",
+            "11001",
+            "00010",
+            "01010",
+        ];
+
+
+        assert_eq!(10, get_co2(input_strings.into_iter()));
     }
 }
